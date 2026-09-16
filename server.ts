@@ -32,24 +32,24 @@ function getGenAI(): GoogleGenAI | null {
   return aiClient;
 }
 
-// System instruction for Origin Recruiters Career Counselor
-const SYSTEM_INSTRUCTION = `You are the friendly, expert AI Career Counselor for Origin Recruiters (ओरिजिन रिक्रूटर्स), the leading BPO placement agency and career consultancy in New Delhi.
+// System instruction for Epic Consultancy Career Counselor
+const SYSTEM_INSTRUCTION = `You are the friendly, expert AI Career Counselor for Epic Consultancy (एपिक कंसलटेंसी), the premier BPO placement agency and career consultancy in New Delhi.
 Key Agency Details:
-- Location: 3rd Floor, Bhartiya Aviation Building, A-18, Opposite Metro Pillar No. 773 (Nearest Metro Station: Dwarka Mor), Sewak Park, New Delhi, Delhi 110059.
-- Contact Phone: +91 98105 69750.
-- Key Recruiter & Mentor: Sneha Singharwa (Lead Placement Specialist & Hiring Advisor).
-- Specializations: Global & Domestic BPO Hiring (Teleperformance, Airbnb process, Concentrix, Genpact, Wipro), Voice & Blended support, Non-voice chat, AMCAT & voice assessment prep, 1-on-1 recruiter mentorship, and mock rounds.
-- Placed Candidates: 480+ selected candidates in top MNC processes.
-- Rating: 4.8/5.0 stars with 485+ Google Reviews.
-- Working Hours: Open daily until 6:30 PM.
-Tone: Warm, encouraging, professional, and practical. Keep responses concise, direct, and structured with bullet points where helpful. Guide candidates on how to crack tests and invite them to visit the Dwarka Mor office or apply online.`;
+- Name: Epic Consultancy (एपिक कंसलटेंसी).
+- Location: 1st Floor, A-109, Ganesh Nagar, Tilak Nagar, New Delhi, Delhi, 110018 (Plus Code: J3PR+F8 New Delhi, Delhi).
+- Contact Phone: 099712 59325 / +91 99712 59325.
+- Key Team & Mentors: Ananya Ma'am, Sunny Sir, Isha, and Nikhil.
+- Specializations: Global & Domestic BPO Hiring (British Airways, Teleperformance, Concentrix, Genpact, Wipro), Voice & Blended customer support, Non-voice live chat & email, interview preparation (76+ mentions), helpful & supportive staff (119+ mentions), and 1-day offer letter expedited placement track.
+- Placed Candidates & Ratings: 4.9/5.0 stars with 506 Google Reviews. Known for candidates receiving offer letters within 1 day (e.g. Kunal Singh) and top airline selections (e.g. Jayas Singh placed at British Airways).
+- Working Hours: Open · Closes 7:00 PM (Daily walk-in evaluations welcome).
+Tone: Warm, encouraging, professional, and practical. Keep responses concise, direct, and structured with bullet points where helpful. Guide candidates on how to crack interviews with confidence and invite them to visit the Tilak Nagar (Ganesh Nagar) office or apply online.`;
 
 // Health check endpoint
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({
     status: "ok",
     hasApiKey: Boolean(process.env.GEMINI_API_KEY),
-    agency: "Origin Recruiters",
+    agency: "Epic Consultancy",
   });
 });
 
@@ -72,8 +72,8 @@ app.post("/api/apply", (req: Request, res: Response) => {
 
   return res.json({
     success: true,
-    message: `Thank you, ${fullName}! Your application for ${processType || "BPO Placement"} has been received. Key recruiter Sneha Singharwa and the Origin Recruiters team will contact you shortly at ${phone}.`,
-    referenceId: "OR-" + Math.floor(100000 + Math.random() * 900000),
+    message: `Thank you, ${fullName}! Your application for ${processType || "BPO Placement"} has been received. Ananya Ma'am, Sunny Sir, and the Epic Consultancy team will contact you shortly at ${phone}.`,
+    referenceId: "EC-" + Math.floor(100000 + Math.random() * 900000),
   });
 });
 
@@ -89,18 +89,18 @@ app.post("/api/chat", async (req: Request, res: Response) => {
     if (!ai) {
       // High-quality contextual fallback response when API key is not configured
       const lower = message.toLowerCase();
-      let fallbackReply = `Hello! I'm the Career Counselor at Origin Recruiters. `;
+      let fallbackReply = `Hello! I'm the Career Counselor at Epic Consultancy (एपिक कंसलटेंसी). `;
 
       if (lower.includes("location") || lower.includes("address") || lower.includes("where") || lower.includes("office")) {
-        fallbackReply += `Our office is located at 3rd Floor, Bhartiya Aviation Building, A-18, Opposite Metro Pillar No. 773 (Nearest Metro Station: Dwarka Mor), Sewak Park, New Delhi 110059. Walk-in interviews are welcome daily until 6:30 PM!`;
-      } else if (lower.includes("versant") || lower.includes("amcat") || lower.includes("test") || lower.includes("airbnb")) {
-        fallbackReply += `For Versant, voice assessments, and specialized accounts like Teleperformance (Airbnb process) and Concentrix, lead recruiter Sneha Singharwa conducts 1-on-1 mock rounds and presentation prep so you clear client rounds with confidence!`;
+        fallbackReply += `Our office is at 1st Floor, A-109, Ganesh Nagar, Tilak Nagar, New Delhi, Delhi 110018 (Plus Code: J3PR+F8). We are open daily until 7:00 PM!`;
+      } else if (lower.includes("ananya") || lower.includes("sunny") || lower.includes("interview") || lower.includes("british airways")) {
+        fallbackReply += `Ananya Ma'am and Sunny Sir conduct dedicated 1-on-1 interview preparation drills so you can crack MNC client rounds (like British Airways, Teleperformance, and Concentrix) with high confidence! Many candidates even receive offer letters within 1 day.`;
       } else if (lower.includes("salary") || lower.includes("pay") || lower.includes("package")) {
-        fallbackReply += `Domestic BPO processes generally range between ₹18,000 to ₹26,000/month, while International Voice, Blended, and Premium accounts (like Airbnb/Teleperformance) offer ₹32,000 to ₹48,000/month plus performance incentives and both-way cabs.`;
+        fallbackReply += `Domestic BPO packages in Delhi NCR range from ₹18,000 to ₹26,000/month, while International Voice & Airline accounts (like British Airways) offer ₹32,000 to ₹48,000/month plus performance incentives and both-way cabs.`;
       } else if (lower.includes("fresher") || lower.includes("experience")) {
-        fallbackReply += `We actively place both freshers and experienced candidates! If you have good communication skills and a positive attitude, we have immediate openings with leading MNCs in Gurgaon, Noida, and Delhi.`;
+        fallbackReply += `We welcome both freshers and experienced candidates! If you have good communication skills, Ananya Ma'am, Sunny Sir, and our team will train you and help you get placed with top MNCs quickly.`;
       } else {
-        fallbackReply += `We specialize in domestic & global BPO placements with dedicated guidance from Sneha Singharwa and our hiring team. Feel free to call us at +91 98105 69750 or submit your application through the "Apply for Job" button!`;
+        fallbackReply += `We specialize in genuine BPO placements with 4.9-star rating across 506 reviews. Feel free to call us at 099712 59325 or submit your application through the "Apply for Job" button!`;
       }
 
       return res.json({ reply: fallbackReply, model: "local-assistant" });
@@ -142,7 +142,7 @@ app.post("/api/chat", async (req: Request, res: Response) => {
     console.error("Gemini chat error:", error);
     return res.status(500).json({
       error: "Failed to generate AI response.",
-      reply: "We are having a brief connection issue, but our recruiters are available directly at +91 98105 69750. Please feel free to call or WhatsApp us!",
+      reply: "We are having a brief connection issue, but our counselors are available directly at 099712 59325. Please feel free to call or WhatsApp us!",
     });
   }
 });
@@ -165,7 +165,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Origin Recruiters server running on http://0.0.0.0:${PORT}`);
+    console.log(`Epic Consultancy server running on http://0.0.0.0:${PORT}`);
   });
 }
 
